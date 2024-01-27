@@ -66,27 +66,27 @@ function cfg_gTxns(actMngr){
   }
 
   var accountRange = getNamedRange('txnAccount'); //sheet.getRange(3,3,sheet.getMaxRows(),1);
-  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).allowInvalidData(false).build());
+  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).setAllowInvalid(false).build());
 
   var incomeRange = getNamedRange('txnIncome'); //sheet.getRange(3,4,sheet.getMaxRows(),1);
-  incomeRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Y','N','IY','IN'], true).allowInvalidData(false).build());
+  incomeRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Y','N','IY','IN'], true).setAllowInvalid(false).build());
 
   var categoryRange = getNamedRange('txnCategory'); //sheet.getRange(3,5,sheet.getMaxRows(),1);
-  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).allowInvalidData(false).build());
+  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).setAllowInvalid(false).build());
 
   var accountToRange = getNamedRange('txnAccountTo'); //sheet.getRange(3,6,sheet.getMaxRows(),1);
   sheet.getRange(3,6).setValue('=IFNA(IF(E3="Transfer","Enter Acct","N/A"),0)');
   sheet.getRange(3,6).autoFill(accountToRange,SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
-  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).allowInvalidData(false).build());
+  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).setAllowInvalid(false).build());
 
   var amountRange = getNamedRange('txnAmount'); //sheet.getRange(3,7,sheet.getMaxRows(),1);
   amountRange.setNumberFormat("[$$]#,##0.00");
 
   var shareRange = getNamedRange('txnShared'); //sheet.getRange(3,8,sheet.getMaxRows(),1);
-  shareRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['y','n','Apt']).allowInvalidData(false));
+  shareRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['y','n','Apt']).setAllowInvalid(false));
 
   var reimburseMethodRange = getNamedRange('txnReimburseMethod'); //sheet.getRange(3,9,sheet.getMaxRows(),1);
-  reimburseMethodRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Venmo','Zelle']).allowInvalidData(false));
+  reimburseMethodRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Venmo','Zelle']).setAllowInvalid(false));
 
   var reimburseAmountRange = getNamedRange('txnReimburseAmt'); //sheet.getRange(3,10,sheet.getMaxRows(),1);
   sheet.getRange(3,10).setValue('=IFNA(IF(H3="Apt",ROUND(2*(G3/3),2),IF(H3="y","Enter amt",0)),0)');
@@ -94,7 +94,7 @@ function cfg_gTxns(actMngr){
   reimburseAmountRange.setNumberFormat("[$$]#,##0.00");
 
   var paymentReceivedRange = getNamedRange('txnPaymentReceived'); // sheet.getRange(3,11,sheet.getMaxRows(),1);
-  paymentReceivedRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['y','n']).allowInvalidData(false));
+  paymentReceivedRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['y','n']).setAllowInvalid(false));
 
 
 }
