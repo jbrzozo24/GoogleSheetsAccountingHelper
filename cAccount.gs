@@ -26,12 +26,17 @@
 //    AddCreditCardExpense()
 class cAccount {
 
-  constructor(displayName,dropdownName,acctType,statementCloseDate = -1) { // class constructor
+  constructor(displayName,dropdownName,acctType,statementCloseDate = -1,prevStatementBalance=0) { // class constructor
 
     // Generic Account Info
     this.displayName = displayName;
     this.dropdownName = dropdownName;
     this.acctType = acctType; // Enum: checking, savings, brokerage, credit, retirement, health, cd, default
+
+    // For Credit Accounts we may need to add a balance from a previous statement
+    // that we don't want to be included in the January month. For this, we just
+    // need to update the initial and current balance, which we do in SetInitValues
+    this.prevStatementBalance = prevStatementBalance; 
     
     // Account Value Tracking
     this.initialValue; // The Initial Value of the cost basis of the Account for this year
@@ -56,6 +61,7 @@ class cAccount {
     }
 
     this.InitValues();
+
   }
 
 
@@ -76,10 +82,10 @@ class cAccount {
     }
 
     // Setup the initial value and the value for January 1st, no transactions have occurred yet
-    this.initialValue = value;
+    this.initialValue = safeSub(value, this.prevStatementBalance);
     this.interestInitialValue = interest_value;
 
-    this.currentValue = value;
+    this.currentValue = safeSub(value, this.prevStatementBalance);s
     this.interestCurrentValue = interest_value;
 
     // Setup historical balance tracking
