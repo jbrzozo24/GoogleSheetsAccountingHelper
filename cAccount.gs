@@ -85,7 +85,7 @@ class cAccount {
     this.initialValue = safeSub(value, this.prevStatementBalance);
     this.interestInitialValue = interest_value;
 
-    this.currentValue = safeSub(value, this.prevStatementBalance);s
+    this.currentValue = safeSub(value, this.prevStatementBalance);
     this.interestCurrentValue = interest_value;
 
     // Setup historical balance tracking
