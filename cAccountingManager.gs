@@ -86,6 +86,7 @@ class cAccountingManager {
     // Get today's date so we only print out Account Balance History up to the Current Month
     var date = new Date(); 
     var month = date.getMonth();
+    var day = date.getDay();
 
     // Row counter since interest accts take up 2 rows and others take up only 1
     var idx = 0;
@@ -106,17 +107,26 @@ class cAccountingManager {
         idx += 2;
       }
       else if ( this.accountArray[i].acctType == "credit" ){
-        for (var j = 0; j <= month; j++){
+        // For credit accounts, we need to write out an extra month if the next statement has already opened.
+        // We check this by checking the day of the month and seeing if its greater than the statement close day
+        // for this credit account. If so, we print an extra month out
+        var creditMonthToPrint = month;
+        if (day > +this.accountArray[i].statementCloseDate){
+          creditMonthToPrint = safeAdd(creditMonthToPrint, 1);
+        }
+        for (var j = 0; j <= creditMonthToPrint; j++){
           dataValues[idx][this.info.acctinfolength + j] = this.accountArray[i].monthlyValues[j]; 
           dataValues[idx][1] = this.accountArray[i].currentValue;
         } 
         // Report YTD Balance correctly based on monthly balances (depends if latest bill has been paid yet).
         // We just hack this by checking if the values match
-        if ( dataValues[idx][this.info.acctinfolength + month] == this.accountArray[i].currentValue){
+        if ( dataValues[idx][this.info.acctinfolength + creditMonthToPrint] == this.accountArray[i].currentValue){
           // Do nothing, the existing INDEX formula works!
-        } else if ( +(dataValues[idx][this.info.acctinfolength + month]+ +dataValues[idx][this.info.acctinfolength + month-1]) == this.accountArray[i].currentValue ){
-          dataValues[idx][this.info.acctinfolength-2] = +dataValues[idx][this.info.acctinfolength + month]+ +dataValues[idx][this.info.acctinfolength + month-1];
-        } else {
+        } 
+        else if ( +(dataValues[idx][this.info.acctinfolength + creditMonthToPrint]+ +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1]) == this.accountArray[i].currentValue ){
+          dataValues[idx][this.info.acctinfolength-2] = +dataValues[idx][this.info.acctinfolength + creditMonthToPrint]+ +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1];
+        } 
+        else {
           dataValues[idx][this.info.acctinfolength-2] = "Something went wrong";
         }
         
@@ -375,7 +385,12 @@ class cAccountingManager {
       // Update the account transferred to's balance:
       if (txn.incomeType == 'Y'){
         this.accountArray[acctIdx].Withdraw(txn.amount, txn.date);
-      } else if (txn.incomeType == 'N'){
+      } 
+      else if (txn.incomeType == 'N' && txn.accountArray[acctIdx].acctType == 'credit'){
+        // If the accountTo type is credit and we are doing a transfer, we want to PayCreditCardStatement, not deposit
+        this.accountArray[acctIdx].PayCreditCardStatement(txn.amount);
+      }
+      else if (txn.incomeType == 'N'){
         this.accountArray[acctIdx].Deposit(txn.amount, txn.date);
       } // 'IY' AND 'IN' CASES don't make sense here
       else {

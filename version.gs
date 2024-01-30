@@ -1,3 +1,3 @@
 function myFunction() {
-  var version = "3.0.4.1";
+  var version = "3.0.5";
 }
