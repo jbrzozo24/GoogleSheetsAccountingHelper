@@ -32,6 +32,7 @@ function generate_gAccounts(actMngr){
   createNamedRange('accountRefreshable',sheet.getRange(6,2,rows,actMngr.info.acctinfolength+12));
   createNamedRange('accountInit', sheet.getRange(6,actMngr.info.acctinfolength+1,rows,1));
   createNamedRange('accountManual',sheet.getRange(6,2,actMngr.acctRows,1));
+  createNamedRange('accountCurrent',sheet.getRange(6,3,actMngr.acctRows,1));
 
   createNamedRange('accountTotals',sheet.getRange(3,2,3,actMngr.info.acctinfolength+12));
   createNamedRange('accountHeader',sheet.getRange(1,actMngr.info.acctinfolength+2,2,13)); // 13 because we need the carry over month for credit cards
@@ -47,6 +48,10 @@ function generate_gAccounts(actMngr){
 
   // Make the side bar
   makeAccountsSideBar(actMngr,initValues,manualValues);
+
+    
+  // Add conditional formatting
+  addAccountsCondFormatting(actMngr);
 
 }
 
@@ -209,7 +214,27 @@ function makeAccountsSideBar(actMngr, initValues, manualValues){
                      .autoFill(sheet.getRange(5,2,1,actMngr.info.acctinfolength-2),SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
 
 
+
 }
+
+function addAccountsCondFormatting(actMngr){
+
+  //Get the active spreadsheet
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("gAccounts");
+
+  // Add rule to format the manual balance column green if it matches the current value the spreadsheet thinks
+  var range = getNamedRange('accountManual');
+  var rule = SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied("=EQ(AccountManual,AccountCurrent)")
+      .setBackground("#b7e1cd")
+      .setRanges([range])
+      .build();
+  var rules = sheet.getConditionalFormatRules();
+  rules.push(rule);
+  sheet.setConditionalFormatRules(rules);
+}
+
+
 
 // Returns the Formula to add for a specific totals formula based on the rowsList provided
 // we also return a slightly modified formula for use where the interest account rows are
