@@ -4,6 +4,8 @@
 function onOpen() {
   SpreadsheetApp.getUi().createMenu("Accting Utilities")
   .addItem("Refresh Data", "refresh")
+  .addItem("Regenerate gCategories only", "regenerate_categories")
+  .addItem("Regenerate gAccounts only", "regenerate_accounts")
   .addItem("Regenerate gAccounts and gCategories", "regenerate")
   .addItem("Step 2: Create Charts from scratch", "createCharts")
   .addItem("Step 1: Generate gAccounts and gCategories from user_input", "regenerate")

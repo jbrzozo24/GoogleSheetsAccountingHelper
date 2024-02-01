@@ -3,12 +3,18 @@
 // they were there previously, so regenerating can be done safely.
 function generate_gAccounts(actMngr){
 
-  // Delete the existing sheet if it exists and insert a new one but get the initial values first.
+  // Delete the existing sheet if it exists and insert a new one but get the initial balances and manual balances first.
   var initValues = -1;
+  var manualValues = -1;
   try {
     var sh= SpreadsheetApp.getActiveSpreadsheet().getSheetByName('gAccounts');
+
     var initRange = sh.getRange(6,actMngr.info.acctinfolength+1,actMngr.acctRows,1);
     initValues = initRange.getValues();
+
+    var manualRange = sh.getRange(6,2,actMngr.acctRows,1);
+    manualValues = manualRange.getValues();
+
     SpreadsheetApp.getActiveSpreadsheet().deleteSheet(sh);
   } catch {
     console.log("Tried to delete gAccounts but it didn't exist")
@@ -25,6 +31,7 @@ function generate_gAccounts(actMngr){
   createNamedRange('accountData',sheet.getRange(3,2,rows+3,actMngr.info.acctinfolength+12)); // Used for formatting
   createNamedRange('accountRefreshable',sheet.getRange(6,2,rows,actMngr.info.acctinfolength+12));
   createNamedRange('accountInit', sheet.getRange(6,actMngr.info.acctinfolength+1,rows,1));
+  createNamedRange('accountManual',sheet.getRange(6,2,actMngr.acctRows,1));
 
   createNamedRange('accountTotals',sheet.getRange(3,2,3,actMngr.info.acctinfolength+12));
   createNamedRange('accountHeader',sheet.getRange(1,actMngr.info.acctinfolength+2,2,13)); // 13 because we need the carry over month for credit cards
@@ -39,7 +46,7 @@ function generate_gAccounts(actMngr){
   makeAccountsHeader(actMngr.info);
 
   // Make the side bar
-  makeAccountsSideBar(actMngr,initValues);
+  makeAccountsSideBar(actMngr,initValues,manualValues);
 
 }
 
@@ -81,7 +88,7 @@ function makeAccountsHeader(info){
 
 }
 
-function makeAccountsSideBar(actMngr, initValues){
+function makeAccountsSideBar(actMngr, initValues, manualValues){
 
   //Get the active spreadsheet
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("gAccounts");
@@ -161,6 +168,11 @@ function makeAccountsSideBar(actMngr, initValues){
     var initRange= getNamedRange('accountInit'); 
     initRange.setValues(initValues);
   }
+  // Overwrite the manualValues if applicable
+  if (manualValues != -1) {
+    var manualRange= getNamedRange('accountManual'); 
+    manualRange.setValues(manualValues);
+  }  
 
   // Set up border around monthly range
   var monthlyRange = getNamedRange('accountMonthly'); 
