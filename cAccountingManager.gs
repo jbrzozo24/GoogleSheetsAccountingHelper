@@ -84,9 +84,9 @@ class cAccountingManager {
 
 
     // Get today's date so we only print out Account Balance History up to the Current Month
-    var date = new Date(); 
+    var date = new Date();
     var month = date.getMonth();
-    var day = date.getDay();
+    var day = date.getDate();
 
     // Row counter since interest accts take up 2 rows and others take up only 1
     var idx = 0;
@@ -111,6 +111,7 @@ class cAccountingManager {
         // We check this by checking the day of the month and seeing if its greater than the statement close day
         // for this credit account. If so, we print an extra month out
         var creditMonthToPrint = month;
+
         if (day > +this.accountArray[i].statementCloseDate){
           creditMonthToPrint = safeAdd(creditMonthToPrint, 1);
         }
@@ -123,11 +124,12 @@ class cAccountingManager {
         if ( dataValues[idx][this.info.acctinfolength + creditMonthToPrint] == this.accountArray[i].currentValue){
           // Do nothing, the existing INDEX formula works!
         } 
-        else if ( +(dataValues[idx][this.info.acctinfolength + creditMonthToPrint]+ +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1]) == this.accountArray[i].currentValue ){
+        else if ( safeAdd(+dataValues[idx][this.info.acctinfolength + creditMonthToPrint], +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1]) == this.accountArray[i].currentValue ){
           dataValues[idx][this.info.acctinfolength-2] = +dataValues[idx][this.info.acctinfolength + creditMonthToPrint]+ +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1];
         } 
         else {
           dataValues[idx][this.info.acctinfolength-2] = "Something went wrong";
+          console.error("Current Balance: " + this.accountArray[i].currentValue + ". Last two months Balances: " + safeAdd(+dataValues[idx][this.info.acctinfolength + creditMonthToPrint], +dataValues[idx][this.info.acctinfolength + creditMonthToPrint-1]));
         }
         
         idx += 1;
@@ -386,7 +388,7 @@ class cAccountingManager {
       if (txn.incomeType == 'Y'){
         this.accountArray[acctIdx].Withdraw(txn.amount, txn.date);
       } 
-      else if (txn.incomeType == 'N' && txn.accountArray[acctIdx].acctType == 'credit'){
+      else if (txn.incomeType == 'N' && this.accountArray[acctIdx].acctType == 'credit'){
         // If the accountTo type is credit and we are doing a transfer, we want to PayCreditCardStatement, not deposit
         this.accountArray[acctIdx].PayCreditCardStatement(txn.amount);
       }
