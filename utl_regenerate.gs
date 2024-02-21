@@ -48,10 +48,10 @@ function refreshTxnAcctDropdown(actMngr){
   }
 
   var accountRange = sheet.getRange(3,3,sheet.getMaxRows(),1);
-  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).build());
+  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).setAllowInvalid(false).build());
 
   var accountToRange = sheet.getRange(3,6,sheet.getMaxRows(),1);
-  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).build());
+  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).setAllowInvalid(false).build());
 
 }
 
@@ -60,7 +60,7 @@ function refreshTxnCategoryDropdown(actMngr){
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('gTransactions');
 
   var categoryRange = sheet.getRange(3,5,sheet.getMaxRows(),1);
-  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).build());
+  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).setAllowInvalid(false).build());
 
 }
 
@@ -78,13 +78,13 @@ function refreshTransactionsAcctAndCategories(actMngr){
   }
 
   var accountRange = sheet.getRange(3,3,sheet.getMaxRows(),1);
-  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).build());
+  accountRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctNameArray).setAllowInvalid(false).build());
 
   var categoryRange = sheet.getRange(3,5,sheet.getMaxRows(),1);
-  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).build());
+  categoryRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['Transfer'].concat(actMngr.categoryNames)).setAllowInvalid(false).build());
 
   var accountToRange = sheet.getRange(3,6,sheet.getMaxRows(),1);
-  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).build());
+  accountToRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['N/A','Enter Acct'].concat(acctNameArray)).setAllowInvalid(false).build());
 
 }
 
