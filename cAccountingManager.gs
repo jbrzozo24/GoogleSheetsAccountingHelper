@@ -11,18 +11,19 @@ class cAccountingManager {
     this.monthlyBudget = 0;
 
     // Read the gCfg sheet to AddAccounts and Categories
-    this.Configure();
+    this.Configure(info);
   }
 
   //===================================================================
   // Functions to build the account manager from user input
   //===================================================================
 
-  Configure(){
+  Configure(info){
     var sheet = getSheet("gCfg");
 
     var acctsListRange = getNamedRange('cfgAccts');
     var categoryListRange = getNamedRange('cfgCats');
+    var cfgRange = getNamedRange('cfgYearAndMonthlyBudget');
 
     // Add Accounts
     var acctVals = acctsListRange.getValues();
@@ -55,6 +56,12 @@ class cAccountingManager {
         }
       }
     }
+
+    // Set Year
+    info.year = (cfgRange.getValues())[0][0];
+
+    // Set Monthly Budget
+    this.SetMonthlyBudgetAmount((cfgRange.getValues())[0][1]);
   }
 
   AddAccount(accountInstance){

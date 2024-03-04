@@ -14,7 +14,8 @@ function pregenerate_gCfg(){
   // Create Named Ranges
   createNamedRange('cfgAcctTypes',sheet.getRange(2,3,1000,1)); // If someone has over 1000 accounts they can go elsewhere for their accounting lol.
   createNamedRange('cfgCatTypes',sheet.getRange(2,8,1000,1));
-  createNamedRange('cfgHeader',sheet.getRange(1,1,1,8));
+  createNamedRange('cfgHeader',sheet.getRange(1,1,1,11));
+  createNamedRange('cfgYearAndMonthlyBudget',sheet.getRange(2,10,1,2))
   createNamedRange('cfgAccts', sheet.getRange(2,1,1000,5));
   createNamedRange('cfgCats', sheet.getRange(2,7,1000,2));
 
@@ -33,11 +34,12 @@ function makeCfgHeader(){
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("gCfg");
 
   var headerRange = getNamedRange('cfgHeader');
-  headerRange.setValues([["AccountName","DropdownName","Type","Statement Close Date","Credit Statement Balance", ,"Category Name", "Type"]]);
+  headerRange.setValues([["AccountName","DropdownName","Type","Statement Close Date","Credit Statement Balance", ,"Category Name", "Type",,"Year","Monthly Budget Amount"]]);
 
   sheet.setColumnWidths(1,1,200);
   sheet.setColumnWidths(2,1,140);
   sheet.setColumnWidths(4,2,200);
+  sheet.setColumnWidths(11,1,200);
 
   // Set notes
   var cell = sheet.getRange(1,4);

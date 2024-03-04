@@ -52,7 +52,7 @@ function main(){
   // TODO USER: Add desired monthly budget amount, replace 0 with the amount
   // you'd like to spend each month. We'll use this in some of the spreadsheets
   // to let you know how you're tracking on that goal.
-  actMngr.SetMonthlyBudgetAmount(1000);  // CHANGE FROM 1000 to your desired budget
+  // actMngr.SetMonthlyBudgetAmount(1000);  // CHANGE FROM 1000 to your desired budget
   
 
   return actMngr;
