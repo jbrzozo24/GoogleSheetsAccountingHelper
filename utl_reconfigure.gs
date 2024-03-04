@@ -1,3 +1,9 @@
+// This file contains utilities which contribute to reconfiguring the accounting sheet
+// with new options, accounts, etc. 
+// This is not to be confused with refreshing, which only involves updating raw data 
+// after adding new transactions.
+
+
 // Setup gAccounts and gCategories after updating user_input
 function regenerate(){
   //Setup and Get Account manager
@@ -64,6 +70,35 @@ function refreshTxnCategoryDropdown(actMngr){
 
 }
 
+
+function createCfgAcctTypesDropdown(){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('gCfg');
+
+  // Make a list of acctTypes from eAccountColorCode keys
+  var mapIter = eAccountColorCode.keys();
+
+  var acctTypeList = []
+
+  for (var i = 0; i < eAccountColorCode.size; i++){
+    acctTypeList.push(mapIter.next().value);
+  }
+
+  var acctTypeRange = getNamedRange('cfgAcctTypes');
+  acctTypeRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(acctTypeList).setAllowInvalid(false).build())
+}
+
+function createCfgCatTypesDropdown(){
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('gCfg');
+
+  // Make a list of acctTypes from eAccountColorCode keys
+  var mapIter = eAccountColorCode.keys();
+
+  var catTypeList = ['expense','revenue','both','net'];
+
+  var acctTypeRange = getNamedRange('cfgCatTypes');
+  acctTypeRange.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(catTypeList).setAllowInvalid(false).build())
+
+}
 
 // This is used when you only updated your account or category list
 function refreshTransactionsAcctAndCategories(actMngr){

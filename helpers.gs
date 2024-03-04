@@ -12,6 +12,12 @@ function insertSheet(sheetname) {
   return sheet;
 }
 
+// Gets a sheet by name
+function getSheet(sheetname){
+  var sh= SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetname);
+  return sh;
+}
+
 // Sets up Font and Style for a New Sheet
 function setupFontAndStyle(sheet, font, size){
   var range = sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns());

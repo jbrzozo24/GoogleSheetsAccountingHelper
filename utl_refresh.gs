@@ -1,3 +1,8 @@
+// This utility is for "refreshing" data tables 
+// When you add new txns, you need to refresh to
+// see the acct values update.
+
+
 // This function refreshes all refreshable data.
 // In the accounts sheet:
 //     This includes the account info columns, 

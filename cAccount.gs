@@ -179,6 +179,7 @@ const eAccountColorCode = new Map([
   ['retirement', "#8e7cc3"],
   ['health'    , "#ffd966"],
   ['cd'        , "#f6b26b"],
+  ['loan'      , "#d5a6bd"],
   ['default'   , "#a4c2f4"]
 ]);
 

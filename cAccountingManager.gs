@@ -2,7 +2,6 @@
 class cAccountingManager {
   constructor(info){
     this.info = info;
-    this.sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("gAccounts");
     this.acctRows = 0;
     this.accountArray = [];
     this.expenseArray = [];
@@ -10,11 +9,53 @@ class cAccountingManager {
     this.categoryNames = [];
 
     this.monthlyBudget = 0;
+
+    // Read the gCfg sheet to AddAccounts and Categories
+    this.Configure();
   }
 
   //===================================================================
   // Functions to build the account manager from user input
   //===================================================================
+
+  Configure(){
+    var sheet = getSheet("gCfg");
+
+    var acctsListRange = getNamedRange('cfgAccts');
+    var categoryListRange = getNamedRange('cfgCats');
+
+    // Add Accounts
+    var acctVals = acctsListRange.getValues();
+    for (var i = 0; i< acctsListRange.getNumRows(); i++){
+      if (acctVals[i][0] != ''){
+        if (acctVals[i][2] == 'credit'){
+          this.AddAccount(new cAccount(acctVals[i][0],acctVals[i][1],acctVals[i][2],acctVals[i][3],acctVals[i][4]));
+        }
+        else {
+          this.AddAccount(new cAccount(acctVals[i][0],acctVals[i][1],acctVals[i][2]));
+        }
+      }
+    }
+
+    // Add Categories
+    var categoryVals = categoryListRange.getValues();
+    for (var i = 0; i< acctsListRange.getNumRows(); i++){
+      if (categoryVals[i][0] != ''){
+        if (categoryVals[i][1] == 'expense'){
+          this.AddCategory(new cCategory(categoryVals[i][0],true,false));
+        }
+        else if (categoryVals[i][1] == 'revenue'){
+          this.AddCategory(new cCategory(categoryVals[i][0],false,true));
+        }
+        else if (categoryVals[i][1] == 'both'){
+          this.AddCategory(new cCategory(categoryVals[i][0],true,true));
+        }
+        else if (categoryVals[i][1] == 'net'){
+          this.AddCategory(new cCategory(categoryVals[i][0],true,true,true));
+        }
+      }
+    }
+  }
 
   AddAccount(accountInstance){
     this.accountArray.push(accountInstance);
@@ -53,7 +94,7 @@ class cAccountingManager {
   
   // Assigns the initialValue
   SetInitialAcctValues(){
-    var initRange = getNamedRange('accountInit'); // this.sheet.getRange(6,this.info.acctinfolength+1,this.acctRows,1);
+    var initRange = getNamedRange('accountInit');
     var initValues = initRange.getValues();
     var idx = 0;
     for (var i = 0; i < this.accountArray.length; i++){
