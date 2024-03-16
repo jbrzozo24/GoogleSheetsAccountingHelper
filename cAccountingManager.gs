@@ -443,8 +443,12 @@ class cAccountingManager {
       else if (txn.incomeType == 'N'){
         this.accountArray[acctIdx].Deposit(txn.amount, txn.date);
       } // 'IY' AND 'IN' CASES don't make sense here
+      else if (txn.incomeType == 'IN' && ( this.accountArray[acctIdx].acctType == 'checking' || this.accountArray[acctIdx].acctType == 'default' )) {
+        this.accountArray[acctIdx].Deposit(txn.amount, txn.date);
+      }
       else {
         console.error("Transfer reported with income type IN or IY. This is invalid.");
+        throw new Error("Transfer reported with income type IN or IY, and destination account is not checking. This is invalid.");
       }
     }
 
