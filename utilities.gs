@@ -10,10 +10,19 @@ function onOpen() {
   .addItem("Step 2: Create Charts from scratch", "createCharts")
   .addItem("Step 1: Generate gAccounts and gCategories from user_input", "regenerate")
   // This is done by Jack before the user ever sees it. I will go and color code certain columns too
-  .addItem("Step 0: Create gTransactions from Scratch","createTxnsSheet") 
+  .addItem("Step 0: Setup Template","setupTemplate")
+  // .addItem("Step 0: Create gTransactions from Scratch","createTxnsSheet")
   .addToUi();
 }
 
+
+
+function setupTemplate() {
+  var actMngr= main();
+
+  generate_gTxns(actMngr);
+  pregenerate_gCfg();
+}
 
 // function onEdit() {
 //   refresh();
